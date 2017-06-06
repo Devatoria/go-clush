@@ -14,6 +14,7 @@ import (
 )
 
 func main() {
+    // Will run "clush -g webservers puppet agent -t"
     ret, _ := clush.RunOnGroup("webservers", "puppet agent -t")
     fmt.Println("Stdout: ", ret.Stdout)
     fmt.Println("Stderr: ", ret.Stderr)
