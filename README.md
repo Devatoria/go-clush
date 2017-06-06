@@ -4,7 +4,7 @@ go-clush is a simple golang library wrapping the clush (clustershell) command.
 
 ## Example
 
-```
+```go
 package main
 
 import (
