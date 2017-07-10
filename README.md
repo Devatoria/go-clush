@@ -23,8 +23,8 @@ func main() {
 
 ## Features
 
-[ ] Run on all
-[x] Run on group
-[x] Run on nodes
-[x] Exclude nodes from nodes
-[ ] Exclude nodes from group
+- [ ] Run on all
+- [x] Run on group
+- [x] Run on nodes
+- [x] Exclude nodes from nodes
+- [ ] Exclude nodes from group
