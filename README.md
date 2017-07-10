@@ -20,3 +20,11 @@ func main() {
     fmt.Println("Stderr: ", ret.Stderr)
  }
 ```
+
+## Features
+
+[ ] Run on all
+[x] Run on group
+[x] Run on nodes
+[x] Exclude nodes from nodes
+[ ] Exclude nodes from group

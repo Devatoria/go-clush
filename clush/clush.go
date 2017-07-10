@@ -3,6 +3,7 @@ package clush
 import (
 	"bytes"
 	"os/exec"
+	"strings"
 )
 
 // CommandReturn is a ran command with its stdout and stderr (once finished)
@@ -41,6 +42,21 @@ func execute(args ...string) (*CommandReturn, error) {
 // RunOnGroup runs the given command on given clush group
 func RunOnGroup(group, command string) (*CommandReturn, error) {
 	return execute("-g", group, command)
+}
+
+// RunOnNodes runs the given command on given nodes, and excludes some nodes if provided
+func RunOnNodes(nodes []string, excluded []string, command string) (*CommandReturn, error) {
+	// Add -w option with given nodes
+	// and -x option with excluded nodes if provided
+	exec := []string{"-w", strings.Join(nodes, ",")}
+	if len(excluded) > 0 {
+		exec = append(exec, "-x", strings.Join(excluded, ","))
+	}
+
+	// Append command
+	exec = append(exec, command)
+
+	return execute(exec...)
 }
 
 // Version returns the installed clush version
