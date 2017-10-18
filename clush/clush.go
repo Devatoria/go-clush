@@ -6,18 +6,12 @@ import (
 	"strings"
 )
 
-// CommandReturn is a ran command with its stdout and stderr (once finished)
-type CommandReturn struct {
-	Stdout string
-	Stderr string
-}
-
 // execute runs the clush command with given args
-func execute(args ...string) (*CommandReturn, error) {
+func execute(args ...string) (string, string, error) {
 	// Get binary path
 	path, err := exec.LookPath("clush")
 	if err != nil {
-		return nil, err
+		return "", "", err
 	}
 
 	// Generate command buffers for stdout/stderr
@@ -30,22 +24,16 @@ func execute(args ...string) (*CommandReturn, error) {
 	cmd.Stderr = &stderr
 	err = cmd.Run()
 
-	// Generate command return
-	ret := &CommandReturn{
-		Stdout: stdout.String(),
-		Stderr: stderr.String(),
-	}
-
-	return ret, err
+	return stdout.String(), stderr.String(), err
 }
 
 // RunOnGroup runs the given command on given clush group
-func RunOnGroup(group, command string) (*CommandReturn, error) {
+func RunOnGroup(group, command string) (string, string, error) {
 	return execute("-g", group, command)
 }
 
 // RunOnNodes runs the given command on given nodes, and excludes some nodes if provided
-func RunOnNodes(nodes []string, excluded []string, command string) (*CommandReturn, error) {
+func RunOnNodes(nodes []string, excluded []string, command string) (string, string, error) {
 	// Add -w option with given nodes
 	// and -x option with excluded nodes if provided
 	exec := []string{"-w", strings.Join(nodes, ",")}
@@ -61,10 +49,10 @@ func RunOnNodes(nodes []string, excluded []string, command string) (*CommandRetu
 
 // Version returns the installed clush version
 func Version() (string, error) {
-	ret, err := execute("--version")
+	stdout, _, err := execute("--version")
 	if err != nil {
 		return "", err
 	}
 
-	return ret.Stdout, nil
+	return stdout, nil
 }
