@@ -30,16 +30,18 @@ func execute(args ...string) (string, string, error) {
 
 // RunOnGroup runs the given command on given clush group
 func RunOnGroup(group, command string) (string, string, error) {
-	return RunOnGroupWithFanout(group, command, 0)
+	return RunOnGroupWithFanout(group, 0, command)
 }
 
-// RunOnGroupWithFanout runs the givne command on the given clush group, applying
+// RunOnGroupWithFanout runs the given command on the given clush group, applying
 // the given fanout
-func RunOnGroupWithFanout(group, command string, fanout int) (string, string, error) {
-	args := []string{"-g", group, command}
+func RunOnGroupWithFanout(group string, fanout int, command string) (string, string, error) {
+	args := []string{"-g", group}
 	if fanout > 0 {
 		args = append(args, "-f", strconv.Itoa(fanout))
 	}
+
+	args = append(args, command)
 
 	return execute(args...)
 }
