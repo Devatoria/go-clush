@@ -3,6 +3,7 @@ package clush
 import (
 	"bytes"
 	"os/exec"
+	"strconv"
 	"strings"
 )
 
@@ -29,7 +30,18 @@ func execute(args ...string) (string, string, error) {
 
 // RunOnGroup runs the given command on given clush group
 func RunOnGroup(group, command string) (string, string, error) {
-	return execute("-g", group, command)
+	return RunOnGroupWithFanout(group, command, 0)
+}
+
+// RunOnGroupWithFanout runs the givne command on the given clush group, applying
+// the given fanout
+func RunOnGroupWithFanout(group, command string, fanout int) (string, string, error) {
+	args := []string{"-g", group, command}
+	if fanout > 0 {
+		args = append(args, "-f", strconv.Itoa(fanout))
+	}
+
+	return execute(args...)
 }
 
 // RunOnNodes runs the given command on given nodes, and excludes some nodes if provided
